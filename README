@@ -1,0 +1,5 @@
+basplice 
+The main propose to develop the software is finding splice junction in RNA.
+My development is base on bwa, an open source mapping software which is widely 
+used. But, many aglorithm should adjust to implement our intension, 
+    like index style, and search method.
