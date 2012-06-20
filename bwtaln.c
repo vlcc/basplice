@@ -115,34 +115,36 @@ int bwt_cal_width(const Idx2BWT *bi_bwt, int len, const ubyte_t *str, bwt_width_
 	return bid;
 }
 // for debug, get seq real position from seq name
-void get_pos_from_name(char const *name, bwtint_t *start, bwtint_t *end)
-{
-    size_t pos, len;
-    char *tmp_c, *token, *tmp;
-    int i, swp;
-    len = strlen(name);
-    tmp_c = calloc(len + 1, sizeof(char));
-    memset(tmp_c, 0, len+1);
-    memcpy(tmp_c, name, len);
-    tmp = tmp_c;
-    for(token = strtok(tmp,"_"), i = 0;
-            token != NULL;
-            token = strtok(NULL, "_"), ++i){
-        if(i == 1){
-            *start = atoi(token);
-        }
-        if(i == 2) {
-            *end = atoi(token);
-            break;
-        }
-    }
-    if (*start > *end) {
-        swp = *start;
-        *start = *end;
-        *end = swp;
-    }
-    free(tmp_c);
-}
+/* void get_pos_from_name(char const *name, bwtint_t *start, bwtint_t *end)
+ * {
+ *     size_t pos, len;
+ *     char *tmp_c, *token, *tmp;
+ *     int i, swp;
+ *     len = strlen(name);
+ *     tmp_c = calloc(len + 1, sizeof(char));
+ *     memset(tmp_c, 0, len+1);
+ *     memcpy(tmp_c, name, len);
+ *     tmp = tmp_c;
+ *     for(token = strtok(tmp,"_"), i = 0;
+ *             token != NULL;
+ *             token = strtok(NULL, "_"), ++i){
+ *         if(i == 1){
+ *             *start = atoi(token);
+ *         }
+ *         if(i == 2) {
+ *             *end = atoi(token);
+ *             break;
+ *         }
+ *     }
+ *     if (*start > *end) {
+ *         swp = *start;
+ *         *start = *end;
+ *         *end = swp;
+ *     }
+ *     free(tmp_c);
+ * }
+ * 
+ */
 
 /* // if seq_id & offset is found, return 1, else insert into pos
  * int inline bwt_check_pos(pos_t *pos, int seq_id, unsigned int offset, int n_seq_id){
@@ -287,11 +289,13 @@ void bwa_cal_sa_reg_gap(int tid,const Idx2BWT *bi_bwt, int n_seqs, bwa_seq_t *se
     aux->rc_seq = (ubyte_t *)calloc(max_len + 1, sizeof(ubyte_t));
 
     // TODO for debug
-    bwtint_t seq_id, offset, hit_num, seq_start, seq_end, called_num;
-    bwtint_t miss_num, tmp_sa;
-    int b_hit = 0;
-    called_num = 0; hit_num = 0; offset = 0; seq_id = 0; seq_id = 0;
-    offset = 0; seq_start = 0; seq_end = 0, miss_num = 0;
+/*     bwtint_t seq_id, offset, hit_num, seq_start, seq_end, called_num;
+ *     bwtint_t miss_num, tmp_sa;
+ *     int b_hit = 0;
+ *     called_num = 0; hit_num = 0; offset = 0; seq_id = 0; seq_id = 0;
+ *     offset = 0; seq_start = 0; seq_end = 0, miss_num = 0;
+ */
+
 
     int _i, j, _j;
 	for (i = 0; i != n_seqs; ++i) {
@@ -353,24 +357,25 @@ void bwa_cal_sa_reg_gap(int tid,const Idx2BWT *bi_bwt, int n_seqs, bwa_seq_t *se
             p->aln->end = p->len - 1;
         }
         // TODO debug
-        if(p->n_aln != 0) {
-            b_hit = 0;
-            called_num ++;
-            get_pos_from_name(p->name, &seq_start, &seq_end);
-            for(tmp_sa = p->aln->k; tmp_sa <= p->aln->l; ++tmp_sa){
-                BWTRetrievePositionFromSAIndex(bi_bwt, tmp_sa, &seq_id, &offset);
-                if(seq_start == 0 && seq_end ==0)
-                    continue;
-                if(offset >= seq_start && offset < seq_end) {
-                    hit_num ++;
-                    b_hit = 1;
-                    break;
-                }
-            }
-            if(b_hit == 0) {
-                miss_num += 1;
-            }
-        }
+/*         if(p->n_aln != 0) {
+ *             b_hit = 0;
+ *             called_num ++;
+ *             get_pos_from_name(p->name, &seq_start, &seq_end);
+ *             for(tmp_sa = p->aln->k; tmp_sa <= p->aln->l; ++tmp_sa){
+ *                 BWTRetrievePositionFromSAIndex(bi_bwt, tmp_sa, &seq_id, &offset);
+ *                 if(seq_start == 0 && seq_end ==0)
+ *                     continue;
+ *                 if(offset >= seq_start && offset < seq_end) {
+ *                     hit_num ++;
+ *                     b_hit = 1;
+ *                     break;
+ *                 }
+ *             }
+ *             if(b_hit == 0) {
+ *                 miss_num += 1;
+ *             }
+ *         }
+ */
 
 		// clean up the unused data in the record
 		if(p->name) free(p->name);
